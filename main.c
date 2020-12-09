@@ -47,13 +47,15 @@ int main(int argc, char *argv[]){
             getNameFile(argc, argv, &filename);
             strcat(filename, ".csv");
             FILE *csv = fopen(filename, "w+");
-            for (j = 1; j < (Data0.days / Data0.interval) + 1; j++){               
+            printCsv(csv, 1, Data0, Data0.interval);
+            printConsole(1, Data0,  Data0.interval);
+            for (j = 1; j < (Data0.days / Data0.interval); j++){               
                 saida[j].susceptible = getS(j, &Data0, &saida[j-1]);
                 saida[j].recovered = getR(j, &Data0, &saida[j-1]);
                 saida[j].infected = getI(j, &Data0, &saida[j-1]);
-                printCsv(csv, j, saida[j], saida[j-1].interval);
-                printConsole(j, saida[j], saida[j-1].interval);
                 saida[j].interval = getInterval(j, &Data0, &saida[j-1]);
+                printCsv(csv, j + 1, saida[j], saida[j].interval);
+                printConsole(j + 1, saida[j], saida[j].interval);
             }
             fclose(csv);
             free(saida);
