@@ -12,7 +12,7 @@ typedef struct {
   double days;
 } Data_t;
 
-int getInitialParameters(char *dest, Data_t *data);
+int getInitialParameters(char *dest, Data_t *data, int argc, char *argv[]);
 int getK(double *k, double m_k, double n_k, double T_k);
 int getB(double *b, double N_b, double T_b, double S_b0, double I_b0);
 double getS(int x, Data_t *zero, Data_t *previous);
@@ -29,7 +29,7 @@ int main(int argc, char *argv[]){
     for (i = 1; i < argc; i++){
         if(argv[i][0] == '-' && argv[i][1] == 'i' && argv[i][2] == '\0' ){
             
-            if(getInitialParameters(argv[i+1], &Data0))
+            if(getInitialParameters(argv[i+1], &Data0, argc, argv))
             {
                 printf("Por favor Insira um caminho para o arquivo de entrada apos o -i.");
                 return 1;
@@ -89,7 +89,7 @@ int getK(double *k, double m_k, double n_k, double T_k){
     return 0;
 }
 
-int getInitialParameters(char *dest, Data_t *data){
+int getInitialParameters(char *dest, Data_t *data, int argc, char *argv[]){
     int i = 0;
     FILE *input;
     input = fopen(dest, "r");
@@ -104,6 +104,46 @@ int getInitialParameters(char *dest, Data_t *data){
         i++;
     }
     if(i != 12)return 1;
+    int j;
+    for ( j = 1; j < argc; j++)
+    {
+        if(argv[j][0] == '-' && argv[j][1] == 'S' && argv[j][2] == '0' && argv[j][3] == '\0' ){
+            strcpy(aux[0], argv[j+1]);
+        }
+        if(argv[j][0] == '-' && argv[j][1] == 'I' && argv[j][2] == '0' && argv[j][3] == '\0' ){
+            strcpy(aux[1], argv[j+1]);
+        }
+        if(argv[j][0] == '-' && argv[j][1] == 'R' && argv[j][2] == '0' && argv[j][3] == '\0' ){
+            strcpy(aux[2], argv[j+1]);
+        }
+        if(argv[j][0] == '-' && argv[j][1] == 'h' && argv[j][2] == '\0' ){
+            strcpy(aux[3], argv[j+1]);
+        }
+        if(argv[j][0] == '-' && argv[j][1] == 'N' && argv[j][2] == 'b' && argv[j][3] == '\0' ){
+            strcpy(aux[4], argv[j+1]);
+        }
+        if(argv[j][0] == '-' && argv[j][1] == 'T' && argv[j][2] == 'b' && argv[j][3] == '\0' ){
+            strcpy(aux[5], argv[j+1]);
+        }
+        if(argv[j][0] == '-' && argv[j][1] == 'S' && argv[j][2] == 'b' && argv[j][3] == '0' && argv[j][4] == '\0'){
+            strcpy(aux[6], argv[j+1]);
+        }
+        if(argv[j][0] == '-' && argv[j][1] == 'I' && argv[j][2] == 'b' && argv[j][3] == '0' && argv[j][4] == '\0'){
+            strcpy(aux[7], argv[j+1]);
+        }
+        if(argv[j][0] == '-' && argv[j][1] == 'm' && argv[j][2] == 'k' && argv[j][3] == '\0' ){
+            strcpy(aux[8], argv[j+1]);
+        }
+        if(argv[j][0] == '-' && argv[j][1] == 'n' && argv[j][2] == 'k' && argv[j][3] == '\0' ){
+            strcpy(aux[9], argv[j+1]);
+        }
+        if(argv[j][0] == '-' && argv[j][1] == 'T' && argv[j][2] == 'k' && argv[j][3] == '\0' ){
+            strcpy(aux[10], argv[j+1]);
+        }
+        if(argv[j][0] == '-' && argv[j][1] == 'd' && argv[j][2] == '\0' ){
+            strcpy(aux[11], argv[j+1]);
+        }
+    }
     data->susceptible = strtod(aux[0], &ret);
     data->infected = atoi(aux[1]);
     data->recovered = strtod(aux[2], &ret);
@@ -113,8 +153,8 @@ int getInitialParameters(char *dest, Data_t *data){
     data->days = strtod(aux[11], &ret);
 
 
-//S(0), I(0), R(0), h, N_b, T_b, S_b0, I_b0, m_k, n_k, T_k
-// 0     1     2    3   4    5    6     7     8    9   10
+    //S(0), I(0), R(0), h, N_b, T_b, S_b0, I_b0, m_k, n_k, T_k
+    // 0     1     2    3   4    5    6     7     8    9   10
     return 0;
 }
 
