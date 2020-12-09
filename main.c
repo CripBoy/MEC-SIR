@@ -21,11 +21,13 @@ double getR(int x, Data_t *zero, Data_t *previous);
 double getInterval(int x, Data_t *zero, Data_t *previous);
 int printCsv(FILE *file, int index, Data_t print, double interval);
 int printConsole(int index, Data_t print, double interval);
+int getNameFile(int argc, char *argv[], char *filename);
 
 int main(int argc, char *argv[]){
     int i, j;
     Data_t Data0;
-    
+    char filename[50];
+    strcpy(filename,"saida");
     for (i = 1; i < argc; i++){
         if(argv[i][0] == '-' && argv[i][1] == 'i' && argv[i][2] == '\0' ){
             
@@ -41,8 +43,10 @@ int main(int argc, char *argv[]){
             saida[0].recovered = Data0.recovered;
             saida[0].susceptible = Data0.susceptible;
             saida[0].interval = Data0.interval;
-
-            FILE *csv = fopen("numeros.csv", "w+");            
+            
+            getNameFile(argc, argv, &filename);
+            strcat(filename, ".csv");
+            FILE *csv = fopen(filename, "w+");
             for (j = 1; j < (Data0.days / Data0.interval) + 1; j++){               
                 saida[j].susceptible = getS(j, &Data0, &saida[j-1]);
                 saida[j].recovered = getR(j, &Data0, &saida[j-1]);
@@ -180,4 +184,15 @@ int printConsole(int index, Data_t print, double interval){
     printf( "%.4f,", print.infected);
     printf( "%.7f,", print.recovered);
     printf( "%.1f\n", interval);
+}
+
+int getNameFile(int argc, char *argv[], char *filename){
+    int j;
+    for ( j = 1; j < argc; j++)
+    {
+        if(argv[j][0] == '-' && argv[j][1] == 'o' && argv[j][2] == '\0' ){
+            strcpy(filename, argv[j+1]);
+        }
+    }
+    return 0;
 }

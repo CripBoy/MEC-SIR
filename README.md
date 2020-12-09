@@ -18,3 +18,21 @@
 ## Arquivo de entrada
 - Formato: `S(0) I(0) R(0) h N_b T_b S_b0 I_b0 m_k n_k T_k T`
 - Exemplo: `68 2 0 0.1 12 24 50 10 6 22 24 504`
+
+## Flags
+- E/S
+  * `-i path\to\file.txt`: Informa ao programa um arquivo de com os parâmetros iniciais(obrigatório).
+  * `-o nome`: Altera o nome do documento de saida, padrão:`saida.csv`.
+- Parâmetros
+  * `-S0 valor`: Altera o valor inicial de indivíduos suscetíveis.  
+  * `-I0 valor`: Altera o valor inicial de indivíduos infectados.
+  * `-R0 valor`: Altera o valor inicial de indivíduos removidos.
+  * `-h valor`: Altera o intervalo de tempo entre cada simulação.
+  * `-Nb valor`: Altera o valor correspondente ao número de pessoas suscetíveis que se infectaram em um intervalo de tempo.
+  * `-Tb valor`: Altera o intervalo de tempo utilizado na calculo de facilidade de contágio de um indivíduo.
+  * `-Sb0 valor`: Altera o valor correspondente ao número de pessoas suscetíveis no início da observação.
+  * `-Ib0 valor`: Altera o valor correspondente ao número de pessoas infectadas no início da observação.
+  * `-mk valor`: Altera o valor correspondente ao número de indivíduos que se recuperaram utilizado no calculo de probabilidade de recuperação do indivíduo.
+  * `-nk valor`: Altera o valor correspondente ao número total de indivíduos utilizado no calculo de probabilidade de recuperação do indivíduo.
+  * `-Tk valor`: Altera o intervalo de tempo utilizado no calculo de probabilidade de recuperação do indivíduo.
+  * `-d valor`: Altera o a quantidade de dias simulados.
