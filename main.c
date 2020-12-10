@@ -10,6 +10,7 @@ typedef struct {
   double recoveryProbability;
   double interval;
   double days;
+  double dead;
 } Data_t;
 
 int getInitialParameters(char *dest, Data_t *data, int argc, char *argv[]);
@@ -18,16 +19,18 @@ int getB(double *b, double N_b, double T_b, double S_b0, double I_b0);
 double getS(int x, Data_t *zero, Data_t *previous);
 double getI(int x, Data_t *zero, Data_t *previous);
 double getR(int x, Data_t *zero, Data_t *previous);
+int getDead(double *dead, double R);
 double getInterval(int x, Data_t *zero, Data_t *previous);
 int printCsv(FILE *file, int index, Data_t print, double interval);
 int printConsole(int index, Data_t print, double interval);
 int getNameFile(int argc, char *argv[], char *filename);
 
 int main(int argc, char *argv[]){
-    int i, j;
+    int i, j, exe;
     Data_t Data0;
-    char filename[50];
+    char filename[50], ifilename[50];
     strcpy(filename,"saida");
+    strcpy(ifilename,"chart-win.exe -i ");
     for (i = 1; i < argc; i++){
         if(argv[i][0] == '-' && argv[i][1] == 'i' && argv[i][2] == '\0' ){
             
@@ -43,8 +46,10 @@ int main(int argc, char *argv[]){
             saida[0].recovered = Data0.recovered;
             saida[0].susceptible = Data0.susceptible;
             saida[0].interval = Data0.interval;
+            saida[0].dead = Data0.dead;
             
             getNameFile(argc, argv, &filename);
+            strcat(ifilename, filename);
             strcat(filename, ".csv");
             FILE *csv = fopen(filename, "w+");
             printCsv(csv, 1, Data0, Data0.interval);
@@ -54,11 +59,15 @@ int main(int argc, char *argv[]){
                 saida[j].recovered = getR(j, &Data0, &saida[j-1]);
                 saida[j].infected = getI(j, &Data0, &saida[j-1]);
                 saida[j].interval = getInterval(j, &Data0, &saida[j-1]);
+                getDead(&saida[j].dead, saida[j].recovered);
                 printCsv(csv, j + 1, saida[j], saida[j].interval);
                 printConsole(j + 1, saida[j], saida[j].interval);
             }
             fclose(csv);
             free(saida);
+
+            exe = system(ifilename);
+            printf("%d",exe);
         }
     }
 
@@ -92,6 +101,11 @@ int getB(double *b, double N_b, double T_b, double S_b0, double I_b0){
 
 int getK(double *k, double m_k, double n_k, double T_k){
     *k = m_k/(n_k * T_k);
+    return 0;
+}
+
+int getDead(double *dead, double R){
+    *dead = R * 0.02;
     return 0;
 }
 
@@ -157,6 +171,7 @@ int getInitialParameters(char *dest, Data_t *data, int argc, char *argv[]){
     if(getB(&data->contagionFacility, strtod(aux[4], &ret), strtod(aux[5], &ret), strtod(aux[6], &ret), strtod(aux[7], &ret)))return 1;
     if(getK(&data->recoveryProbability, strtod(aux[8], &ret), strtod(aux[9], &ret), strtod(aux[10], &ret)))return 1;
     data->days = strtod(aux[11], &ret);
+    data->dead = data->recovered * 0.02;
 
 
     //S(0), I(0), R(0), h, N_b, T_b, S_b0, I_b0, m_k, n_k, T_k
@@ -167,15 +182,17 @@ int getInitialParameters(char *dest, Data_t *data, int argc, char *argv[]){
 int printCsv(FILE *file, int index, Data_t print, double interval){
     if(index == 1){
         fprintf(file, "%s,", "x");
-        fprintf(file, "%s,", "S(x)");
-        fprintf(file, "%s,", "I(x)");
-        fprintf(file, "%s,", "R(x)");
+        fprintf(file, "%s,", "S");
+        fprintf(file, "%s,", "I");
+        fprintf(file, "%s,", "R");
+        fprintf(file, "%s,", "Mortos");
         fprintf(file, "%s\n", "Dias");
     }
     fprintf(file, "%d,", index);
     fprintf(file, "%.3f,", print.susceptible);
     fprintf(file, "%.4f,", print.infected);
     fprintf(file, "%.7f,", print.recovered);
+    fprintf(file, "%.7f,", print.dead);
     fprintf(file, "%.1f\n", interval);
     return 0;
 }
