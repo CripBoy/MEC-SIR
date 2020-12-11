@@ -1,6 +1,6 @@
 
-int getInitialParameters(char *dest, Data_t *data, int argc, char *argv[]){
-    int i = 0;
+int getInitialParameters(char *dest, Data_t *data, DataAux_t *auxData, int argc, char *argv[]){
+    int i = 0, cenario = 0, max = 12;
     FILE *input;
     input = fopen(dest, "r");
     char buff[1000], aux[12][10], *ret;
@@ -13,7 +13,6 @@ int getInitialParameters(char *dest, Data_t *data, int argc, char *argv[]){
         token = strtok(NULL, " ");
         i++;
     }
-    if(i != 12)return 1;
     int j;
     for ( j = 1; j < argc; j++)
     {
@@ -53,7 +52,16 @@ int getInitialParameters(char *dest, Data_t *data, int argc, char *argv[]){
         if(argv[j][0] == '-' && argv[j][1] == 'd' && argv[j][2] == '\0' ){
             strcpy(aux[11], argv[j+1]);
         }
+        if(argv[j][0] == '-' && argv[j][1] == 'c' && argv[j][2] == '1' && argv[j][3] == '\0' ){
+            cenario = 1;
+            max = 14;
+        }
+        if(argv[j][0] == '-' && argv[j][1] == 'c' && argv[j][2] == '2' && argv[j][3] == '\0' ){
+            cenario = 2;
+            max = 14;
+        }
     }
+    if(i != max)return 1;
     data->susceptible = strtod(aux[0], &ret);
     data->infected = atoi(aux[1]);
     data->recovered = strtod(aux[2], &ret);
@@ -62,8 +70,26 @@ int getInitialParameters(char *dest, Data_t *data, int argc, char *argv[]){
     if(getK(&data->recoveryProbability, strtod(aux[8], &ret), strtod(aux[9], &ret), strtod(aux[10], &ret)))return 1;
     data->days = strtod(aux[11], &ret);
     data->dead = data->recovered * 0.02;
-
-
+    switch(cenario){
+        case 1:
+            auxData->N_b = strtod(aux[4], &ret);
+            auxData->T_b = strtod(aux[12], &ret);
+            auxData->S_b0 = strtod(aux[6], &ret);
+            auxData->I_b0 = strtod(aux[7], &ret);
+            auxData->timer= strtod(aux[13], &ret) / data->interval;
+            auxData->Case = 1;
+        break;
+        case 2:
+            auxData->m_k = strtod(aux[8], &ret);
+            auxData->n_k = strtod(aux[9], &ret);
+            auxData->T_k = strtod(aux[12], &ret);
+            auxData->timer= strtod(aux[13], &ret) / data->interval;
+            auxData->Case = 2;
+        break;
+        default:
+            auxData->Case = 0;
+        break;
+    }
     //S(0), I(0), R(0), h, N_b, T_b, S_b0, I_b0, m_k, n_k, T_k
     // 0     1     2    3   4    5    6     7     8    9   10
     return 0;
@@ -92,6 +118,7 @@ int printConsole(int index, Data_t print, double interval){
     printf( "%.3f,", print.susceptible);
     printf( "%.4f,", print.infected);
     printf( "%.7f,", print.recovered);
+    printf( "%.7f,", print.dead);
     printf( "%.1f\n", interval);
 }
 

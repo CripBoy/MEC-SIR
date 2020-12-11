@@ -1,22 +1,26 @@
 
-double getS(int x, Data_t *zero, Data_t *previous){
+int getS(double *S, int x, Data_t *zero, Data_t *previous){
     if( x == 0) return zero->susceptible;
-    return previous->susceptible - (zero->interval * zero->contagionFacility * previous->susceptible * previous->infected);
+    *S = previous->susceptible - (zero->interval * zero->contagionFacility * previous->susceptible * previous->infected);
+    return 0;
 }
 
-double getI(int x, Data_t *zero, Data_t *previous){
+int getI(double *I, int x, Data_t *zero, Data_t *previous){
     if( x == 0) return zero->infected;
-    return previous->infected + (zero->interval * (zero->contagionFacility * previous->susceptible * previous->infected - zero->recoveryProbability * previous->infected));
+    *I = previous->infected + (zero->interval * (zero->contagionFacility * previous->susceptible * previous->infected - zero->recoveryProbability * previous->infected));
+    return 0;
 }
 
-double getR(int x, Data_t *zero, Data_t *previous){
+int getR(double *R, int x, Data_t *zero, Data_t *previous){
     if( x == 0) return zero->recovered;
-    return previous->recovered + (zero->interval * zero->recoveryProbability* previous->infected);
+    *R = previous->recovered + (zero->interval * zero->recoveryProbability* previous->infected);
+    return 0;
 }
 
-double getInterval(int x, Data_t *zero, Data_t *previous){
+int getInterval(double *interval, int x, Data_t *zero, Data_t *previous){
     if( x == 0) return zero->interval;
-    return previous->interval + zero->interval;
+    *interval = previous->interval + zero->interval;
+    return 0;
 }
 
 int getB(double *b, double N_b, double T_b, double S_b0, double I_b0){

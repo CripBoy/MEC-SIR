@@ -16,13 +16,23 @@
 - Por linha de comando: `main -i path\to\file.txt`
 
 ## Arquivo de entrada
-- Formato: `S(0) I(0) R(0) h N_b T_b S_b0 I_b0 m_k n_k T_k T`
-- Exemplo: `68 2 0 0.1 12 24 50 10 6 22 24 504`
+-Cenário 0
+  * Formato: `S(0) I(0) R(0) h N_b T_b S_b0 I_b0 m_k n_k T_k T`
+  * Exemplo: `68 2 0 0.1 12 24 50 10 6 22 24 504`
+-Cenário 1
+  * Formato: `S(0) I(0) R(0) h N_b T_b S_b0 I_b0 m_k n_k T_k T T_b1 T_1`
+  * Exemplo: `68 2 0 0.1 12 24 50 10 6 22 24 504 48 300`
+-Cenário 2
+  * Formato: `S(0) I(0) R(0) h N_b T_b S_b0 I_b0 m_k n_k T_k T T_k2 T_2`
+  * Exemplo: `68 2 0 0.1 12 24 50 10 6 22 24 504 10 300`
 
 ## Flags
 - E/S
-  * `-i path\to\file.txt`: Informa ao programa um arquivo de com os parâmetros iniciais(obrigatório).
-  * `-o nome`: Altera o nome do documento de saida, padrão:`saida.csv`.
+  * `-i path\to\file.txt`: Informa ao programa um arquivo de com os parâmetros iniciais (obrigatório).
+  * `-o nome`: Altera o nome do documento de saida, padrão: `saida.csv`.
+- Cenários
+  * `-c1`: Altera para o cenário 1.
+  * `-c2`: Altera para o cenário 2.
 - Parâmetros
   * `-S0 valor`: Altera o valor inicial de indivíduos suscetíveis.  
   * `-I0 valor`: Altera o valor inicial de indivíduos infectados.
