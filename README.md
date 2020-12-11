@@ -16,13 +16,13 @@
 - Por linha de comando: `main -i path\to\file.txt`
 
 ## Arquivo de entrada
--Cenário 0
+- Cenário 0
   * Formato: `S(0) I(0) R(0) h N_b T_b S_b0 I_b0 m_k n_k T_k T`
   * Exemplo: `68 2 0 0.1 12 24 50 10 6 22 24 504`
--Cenário 1
+- Cenário 1
   * Formato: `S(0) I(0) R(0) h N_b T_b S_b0 I_b0 m_k n_k T_k T T_b1 T_1`
   * Exemplo: `68 2 0 0.1 12 24 50 10 6 22 24 504 48 300`
--Cenário 2
+- Cenário 2
   * Formato: `S(0) I(0) R(0) h N_b T_b S_b0 I_b0 m_k n_k T_k T T_k2 T_2`
   * Exemplo: `68 2 0 0.1 12 24 50 10 6 22 24 504 10 300`
 
