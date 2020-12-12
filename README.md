@@ -6,8 +6,11 @@
   * Implementação do modelo SIR e saída no terminal
   * Leitura dos parâmetros iniciais de simulação à partir de um arquivo de texto
   * Implementação do modelo SIR com saída em arquivo de texto csv
-  * Modificações para Checkpoint 2:
-    * ?
+- Checkpoint 2:
+  * Implementação dos cenários
+  * Plotagem do Gráfico
+  * Encapsulamento
+  * Correções Gerais
 
 ## Compilação
 - Método para a compilação via linha de comando: `gcc -o main main.c`
